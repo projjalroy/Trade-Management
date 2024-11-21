@@ -1,5 +1,5 @@
-Trading Psychology and Evaluation Program
-Overview
+##Trading Psychology and Evaluation Program
+#Overview
 This Python-based command-line application helps traders evaluate their psychological readiness and make informed trading decisions. The program offers various utilities, such as a psychology test, trade evaluation based on predefined models, the ability to view available models, and the option to add new evaluation models. All results and models are stored locally, making it easy for users to revisit their evaluations and customize their trading approach.
 
 Features
