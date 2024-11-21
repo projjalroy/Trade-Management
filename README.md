@@ -63,7 +63,7 @@ Exit the program.
 ## Installation and Running the Program
 
 ### 1. Clone the Repository:
-git clone https://github.com/username/trading-evaluation.git
+git clone https://github.com/projjalroy/Trade-Management.git
 cd trading-evaluation
 
 ### 2. Run the Program:
