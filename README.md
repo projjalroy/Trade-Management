@@ -63,11 +63,11 @@ Exit the program.
 ## Installation and Running the Program
 
 ### 1. Clone the Repository:
-git clone https://github.com/projjalroy/Trade-Management.git
-cd trading-evaluation
+#``` git clone https://github.com/projjalroy/Trade-Management.git
+cd trading-evaluation```
 
 ### 2. Run the Program:
-python3 program.py
+#````` python3 program.py`````
 
 ### 3. Dependencies:
 - Ensure you have Python 3.x installed.
