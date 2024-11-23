@@ -398,7 +398,7 @@ def main_menu():
         elif choice == '4':
             add_models()
         elif choice == '5':
-            print("Exiting the program. Goodbye!")
+            print("Exiting the program. Goodbye!Please say thank to TraderPK for this program.")
             break
         else:
             print("Invalid input. Please try again.")
