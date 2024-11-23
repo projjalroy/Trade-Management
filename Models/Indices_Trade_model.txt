@@ -1,0 +1,16 @@
+1. Do we have a clear daily Bias?(ERL>IRL/IRL>ERL)? | 3
+2. Does it a weekly Trading Days (Monday/Tuesday/Wednesday/Thursday)? | 3
+3. Does the HTF DOL is clear? | 3
+4. Does it a Risk Off Market? (Asset is going same direction with DXY)? | 3
+5. Does the market takes the MTF, ERL/IRL ?(B/S-SL or FVG in H1/H4)? | 3
+6. Do we have a clear SMT with the co-related asset in MTF? | 3
+7. Do we have a clear DOL in MTF in the opposite side above or bellow the 0.50% level? | 3
+8. Does the MTF Liq grab occurred above/bellow the 0.50% level based on the premium/discount level? | 3  
+9. Do we have a clear LTF MSS from the MTF Liq grab after the smt? | 3
+10. Do we have SH or STL/STH taken before the LTF MSS? | 3
+11. Does the Asian & London High Liquidity Intact? | 2
+12. Do we retest the LTF POI after the MSS? | 2
+13. Is there any red folder news events today? | 2
+14. Has the red folder liquidity injection been completed? | 2
+15. Is it an excluded no-trading day? | 3
+16. Does the psychology evaluation allows you to trade today? | 3

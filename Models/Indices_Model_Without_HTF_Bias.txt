@@ -1,0 +1,19 @@
+1. Do we have a clear daily Bias ? | 3
+Does it a weekly Trading Days (Monday/Tuesday/Wednesday/Thursday)? | 2
+Does DOL is clear ? | 1
+Does it a Risk Off Market? (Asset is going same direction with DXY)? | 1
+Does It a Red Folder News Day? | 3
+Does the Red Folder Liq Injection Completed? | 3
+Do you executing After 9:30 AM NY time | 3
+Does the market takes the MTF, ERL/IRL ?(B/S-SL or FVG in M15/H1/H4)? | 3
+Does the Liquidity Levels are any session Liquidity? | 3
+Does the Liquidity grab formed in the H1/H4 Premium/Discount Zone? | 3
+Does your EXECUTION aligned with the TDO Rules ? | 3
+Do we have a clear SMT with the co-related asset in MTF? | 3
+Do we have a clear DOL in MTF in the opposite side? | 2
+Does there CISD formed with the Aligned time frame After the SMT? | 3
+Do we have a clear LTF MSS from the MTF Liq grab after the smt? | 2
+Does the opposite side Asian & London High Liquidity Intact? | 2
+Do we retest the LTF POI after the MSS? | 3
+Does the Entry to logical TP-1 in 1:2 R? | 2
+Is it an excluded no-trading day? | 3

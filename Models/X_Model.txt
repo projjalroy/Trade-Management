@@ -1,0 +1,13 @@
+1. Does the Market Takes the (P-W/D-H) Or (P-W/D-L)  HTF (Daily/Weekly) ? | 3
+2. Does the Co-related pair situated in the same zone where the current pair situated? (e.g., near the PW/PD-H/L) | 3
+3. Is there any FVG in MTF(H1/H4) in or near the HTF range Mid (P-D/W-M) as DOL? | 3
+4. Do we get any MTF(H1/H4) SMT after the HTF Liq purge? (e.g, P-D/W-H or P-D/W-L) | 3
+5. Do we have the H1/H4 FVG as a draw intact in (P-D/W-M)? | 3
+6. Does the execution time is in the London Kill Zone Silver Bullet ? | 3
+7. Do we get any LTF m15/H1-MSS after the H1/h4 SMT? In London Kill zone? (LTF m15 for H1 MTF, & H1 for H4 MTF) | 2
+8. Do you have a LTF m15/H1-FVG retest after the m15/H1-MSS? (LTF m15 for H1 MTF, & H1 for H4 MTF) | 2
+9. Does the M15/h1 POI is Above or bellow the TDO Based on the Long/Short rules with the TDO? | 2
+10. Is there any red folder news events today? | 2
+11. Has the red folder liquidity injection been completed? | 2
+12. Is it an excluded no-trading day? | 3
+13. Does the psychology evaluation allows you to trade today? | 3
