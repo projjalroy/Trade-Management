@@ -1,11 +1,117 @@
 #!/usr/bin/env python3
 import os
+import uuid
+import datetime
+import shutil
+from cryptography.fernet import Fernet
 from datetime import datetime
+
+# Encryption Key (should be kept secret)
+SECRET_KEY = b'JOnz7KsNi4zXQVrgxHE3b5PVSxd9-XWMgZ1a-bK0WC0='  # Replace with your generated key
+cipher = Fernet(SECRET_KEY)
+
+# Function to get machine-specific ID (based on MAC address)
+def get_machine_id():
+    mac = uuid.getnode()  # This returns the MAC address of the machine
+    return str(mac)
+
+# Function to validate the license file
+def validate_license(license_key):
+    try:
+        decrypted_data = cipher.decrypt(license_key).decode()
+        machine_id_from_license, expiration_date_str, _ = decrypted_data.split('|')
+        expiration_date = datetime.strptime(expiration_date_str, '%Y-%m-%d')
+        current_date = datetime.now()
+
+        # Validate if the license is for this machine and is still valid
+        if machine_id_from_license == get_machine_id() and current_date <= expiration_date:
+            print("License is valid.")
+            return True
+        else:
+            print("License is invalid or expired.")
+            return False
+    except Exception as e:
+        print(f"Error validating license: {e}")
+        return False
+
+# Function to save the new license provided by the user in the current directory
+def save_license(license_key, file_name='license.key'):
+    # Save the license file in the same directory where the script is running
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    license_path = os.path.join(current_directory, file_name)
+    
+    with open(license_path, 'wb') as f:
+        f.write(license_key)
+
+# Function to load the license from the file in the current directory
+def load_license(file_name='license.key'):
+    # Load the license file from the same directory where the script is running
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    license_path = os.path.join(current_directory, file_name)
+
+    try:
+        with open(license_path, 'rb') as f:
+            return f.read()
+    except FileNotFoundError:
+        return None
+
+# License checking before running the program
+def check_license():
+    license_file = 'license.key'
+    print("Checking license...")
+
+    # Load the existing license key
+    license_key = load_license(license_file)
+
+    if license_key and validate_license(license_key):
+        print("Program running with valid license.")
+        return True
+    else:
+        print("No valid license found or the license has expired.")
+        print(f"Your Unique Machine ID is: {get_machine_id()}")
+        
+        # Ask user to input a new license key
+        new_license_key = input("Please enter your new License Key: ").encode()
+
+        # Validate the new license key
+        if validate_license(new_license_key):
+            save_license(new_license_key, license_file)
+            print("New license saved. Program will now run.")
+            return True
+        else:
+            print("Invalid license. Exiting program.")
+            return False
 
 # Utility function to create a directory if it doesn't exist
 def ensure_directory(directory_name):
     if not os.path.exists(directory_name):
         os.makedirs(directory_name)
+
+# Utility function to archive old result files
+def archive_old_results():
+    results_dir = os.path.join(os.getcwd(), "Results")
+    archive_dir = os.path.join(os.getcwd(), "Archive")
+    
+    # Ensure the Results directory exists
+    ensure_directory(results_dir)
+
+    # Ensure the Archive directory exists
+    ensure_directory(archive_dir)
+
+    # Get the current date in YYYY-MM-DD format
+    current_date = datetime.now().strftime("%Y-%m-%d")
+
+    # Check all files in the Results directory
+    for file_name in os.listdir(results_dir):
+        file_path = os.path.join(results_dir, file_name)
+        
+        # Skip directories, we are only interested in files
+        if os.path.isfile(file_path):
+            # Extract the date part from the filename (assuming it contains the date)
+            if current_date not in file_name:
+                # Move old files to the Archive folder
+                shutil.move(file_path, os.path.join(archive_dir, file_name))
+                print(f"Archived old file: {file_name}")
 
 # Option 1: Psychology Test
 def print_psychology_heading():
@@ -74,18 +180,17 @@ def save_result(name, trading_type, score, total_questions, percentage_score, tr
     results_dir = os.path.join(os.getcwd(), "Results")
     ensure_directory(results_dir)
     
-    # Get the current date and time
-    now = datetime.now()
-    date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Get current date in DD_MM_YY format for unique filename
-    date_str = now.strftime("%d_%m_%y")
+    # Get the current date in YYYY-MM-DD format for the filename
+    date_str = datetime.now().strftime("%Y-%m-%d")
     
     # Filepath to save the result in the Results directory
     file_name = f"Psychology-Test_{date_str}.txt"
     file_path = os.path.join(results_dir, file_name)
 
-    # Format the result
+    # Get the current date and time for the content of the file
+    date_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Format the result content
     result = f"Date/Time: {date_time_str}\nName: {name}\nType of Trading: {trading_type}\n" \
              f"Score: {score}/{total_questions} ({percentage_score:.2f}%)\nStatus: {trading_status}\n\n"
     
@@ -94,7 +199,6 @@ def save_result(name, trading_type, score, total_questions, percentage_score, tr
         file.write(result)
 
     print(f"\nResult saved to: {file_path}")
-
 # Option 2: Trade Evaluation
 def trade_evaluation():
     print("\n" + "*" * 50)
@@ -265,12 +369,15 @@ def add_models():
 
     print(f"\nQuestions saved successfully to: {file_path}")
     input("Press 'Enter' to return to the main menu...")
-
+    
 # Main Menu
 def main_menu():
+    # Archive old files when the program starts
+    archive_old_results()
+
     while True:
         print("\n" + "=" * 50)
-        print(" " * 15 + "Welcome to the Program")
+        print(" " * 5 + "Welcome to Trading Evaluation Program")
         print("=" * 50)
         print("Please select an option:")
         print("1. Psychology Test")
@@ -297,4 +404,8 @@ def main_menu():
             print("Invalid input. Please try again.")
 
 if __name__ == "__main__":
-    main_menu()
+    # License check before running the main program
+    if check_license():
+        main_menu()
+    else:
+        print("Exiting due to invalid or missing license.")
