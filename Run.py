@@ -300,7 +300,94 @@ def trade_evaluation():
     print(f"\nResults saved to: {result_file_path}")
     input("Press 'Enter' to return to the main menu...")
 
-# Option 3: Show Models
+# Option 3: Bias Identification
+def print_bias_identification_heading():
+    print("\n" + "*" * 50)
+    print(" " * 10 + "Trading Bias Evaluation")
+    print("*" * 50)
+    print("Answer the questions honestly to evaluate your bias based on ERL>IRL for trading today.")
+    print("Ensure you're in the right bias for your asset before you trade.\n")
+
+def bias_identification():
+    questions = [
+        "Does the market tagging the HTF ERL/IRL (e.g.,Daily/Weekly/Monthl)?",
+        "Is there SMT formation with a correlated pair in the HTF POI?",
+        "Has the market retested the POI situated OTE levels on the HTF Swing points? (e.g., 0.5% to 0.786% Fibonacci range)?",
+        "Does there any Clear DOL on the opposite side above or bellow Fib 50%",
+        "Do we have any Clear MSS with aligned TF ? After the HTF Liq grab?",
+        "Was SH or STL taken on MTF before MSS confirmation?",
+        "Is there MTF clear POI after the MTF-MSS confirmation? (e.g., OB,FVG,Breaker)",
+        "Is there any red folder news events ahead days?",
+        "Does the market align with the HTF QT Bias?",
+    ]
+    
+    score = 0
+    total_questions = len(questions)
+    
+    # Ask each question and validate input
+    for question in questions:
+        while True:
+            answer = input(f"{question} (yes/no): ").strip().lower()
+            if answer == 'yes':
+                score += 1
+                break
+            elif answer == 'no':
+                break
+            else:
+                print("Please enter 'yes' or 'no'.")
+    
+    # Calculate percentage score
+    percentage_score = (score / total_questions) * 100
+    print(f"\nYour total score is: {score}/{total_questions} ({percentage_score:.2f}%)")
+
+    # Decide if the user should trade today
+    if percentage_score >= 70:
+        trading_status = "Your bias is good, trade this asste on LTF."
+    else:
+        trading_status = "Bias isn't strong enough Don't trade this asset"
+    print(trading_status)
+
+    # Collect user information
+    asset_name = input("\nEnter the asset name: ").strip()
+    chart_timeframe = input("\nEnter the chart time frame: ").strip()
+    trading_type = input("Enter your Bias (e.g., Bullish/Bearish): ").strip()
+
+    # Save the result to a text file in the Results directory
+    save_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status)
+
+    # Thank you note
+    print("\nThank you for using the Trading Bias Evaluation Program!")
+
+    # Wait for the user to exit
+    input("Press 'Enter' to return to the main menu...")
+
+# Save the result of the Bias Evaluation to the Results directory
+def save_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status):
+    # Ensure the Results directory exists
+    results_dir = os.path.join(os.getcwd(), "Results")
+    ensure_directory(results_dir)
+    
+    # Get the current date in YYYY-MM-DD format for the filename
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    
+    # Filepath to save the result in the Results directory
+    file_name = f"Bias Evaluation_{date_str}.txt"
+    file_path = os.path.join(results_dir, file_name)
+
+    # Get the current date and time for the content of the file
+    date_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Format the result content
+    result = f"Date/Time: {date_time_str}\nName: {asset_name}\nType of Bias: {trading_type}\nChart Time Frame :{chart_timeframe}\n" \
+             f"Score: {score}/{total_questions} ({percentage_score:.2f}%)\nStatus: {trading_status}\n\n"
+    
+    # Write the result to the file (append mode)
+    with open(file_path, 'a') as file:
+        file.write(result)
+
+    print(f"\nResult saved to: {file_path}")
+
+# Option 4: Show Models
 def show_models():
     print("\n" + "*" * 50)
     print(" " * 10 + "Show Models")
@@ -322,7 +409,7 @@ def show_models():
 
     input("Press 'Enter' to return to the main menu...")
 
-# Option 4: Add Models
+# Option 5: Add Models
 def add_models():
     print("\n" + "*" * 50)
     print(" " * 10 + "Add Models")
@@ -377,16 +464,17 @@ def main_menu():
 
     while True:
         print("\n" + "=" * 50)
-        print(" " * 5 + "Welcome to Trading Evaluation Program")
+        print(" " * 15 + "Welcome to the Program")
         print("=" * 50)
         print("Please select an option:")
         print("1. Psychology Test")
         print("2. Trade Evaluation")
-        print("3. Show Models")
-        print("4. Add Models")
-        print("5. Exit")
+        print("3. Bias Identification")
+        print("4. Show Models")
+        print("5. Add Models")
+        print("6. Exit")
         
-        choice = input("\nEnter your choice (1-5): ").strip()
+        choice = input("\nEnter your choice (1-6): ").strip()
         
         if choice == '1':
             print_psychology_heading()
@@ -394,11 +482,14 @@ def main_menu():
         elif choice == '2':
             trade_evaluation()
         elif choice == '3':
-            show_models()
+            print_bias_identification_heading()
+            bias_identification()
         elif choice == '4':
-            add_models()
+            show_models()
         elif choice == '5':
-            print("Exiting the program. Goodbye!Please say thank to TraderPK for this program.")
+            add_models()
+        elif choice == '6':
+            print("Exiting the program. Goodbye!")
             break
         else:
             print("Invalid input. Please try again.")
