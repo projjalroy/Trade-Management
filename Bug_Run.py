@@ -166,7 +166,7 @@ def psychology_test():
     trading_type = input("Enter your type of trading (e.g., Systematic, Discretionary): ").strip()
 
     # Save the result to a text file in the Results directory
-    save_result(user_name, trading_type, score, total_questions, percentage_score, trading_status, bias_status="")
+    save_result(user_name, trading_type, score, total_questions, percentage_score, trading_status)
 
     # Thank you note
     print("\nThank you for using the Trading Psychology Evaluation Program!")
@@ -342,10 +342,10 @@ def bias_identification():
 
     # Decide if the user should trade today
     if percentage_score >= 70:
-        bias_status = "Your bias is good, trade this asste on LTF."
+        trading_status = "Your bias is good, trade this asste on LTF."
     else:
-        bias_status = "Bias isn't strong enough Don't trade this asset"
-    print(bias_status)
+        trading_status = "Bias isn't strong enough Don't trade this asset"
+    print(trading_status)
 
     # Collect user information
     asset_name = input("\nEnter the asset name: ").strip()
@@ -353,7 +353,7 @@ def bias_identification():
     trading_type = input("Enter your Bias (e.g., Bullish/Bearish): ").strip()
 
     # Save the result to a text file in the Results directory
-    save_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, bias_status)
+    save_bias_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status)
 
     # Thank you note
     print("\nThank you for using the Trading Bias Evaluation Program!")
@@ -362,7 +362,7 @@ def bias_identification():
     input("Press 'Enter' to return to the main menu...")
 
 # Save the result of the Bias Evaluation to the Results directory
-def save_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, bias_status):
+def save_bias_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status):
     # Ensure the Results directory exists
     results_dir = os.path.join(os.getcwd(), "Results")
     ensure_directory(results_dir)
@@ -379,7 +379,7 @@ def save_result(asset_name, trading_type, chart_timeframe, score, total_question
 
     # Format the result content
     result = f"Date/Time: {date_time_str}\nName: {asset_name}\nType of Bias: {trading_type}\nChart Time Frame :{chart_timeframe}\n" \
-             f"Score: {score}/{total_questions} ({percentage_score:.2f}%)\nStatus: {bias_status}\n\n"
+             f"Score: {score}/{total_questions} ({percentage_score:.2f}%)\nStatus: {trading_status}\n\n"
     
     # Write the result to the file (append mode)
     with open(file_path, 'a') as file:
