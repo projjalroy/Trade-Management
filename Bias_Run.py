@@ -371,7 +371,7 @@ def save_bias_result(asset_name, trading_type, chart_timeframe, score, total_que
     date_str = datetime.now().strftime("%Y-%m-%d")
     
     # Filepath to save the result in the Results directory
-    file_name = f"Bias Evaluation_{date_str}.txt"
+    file_name = f"Bias_Evaluation_{date_str}.txt"
     file_path = os.path.join(results_dir, file_name)
 
     # Get the current date and time for the content of the file
