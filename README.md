@@ -67,7 +67,7 @@ Exit the program.
 cd trading-evaluation```
 
 ### 2. Run the Program:
-#````` python3 program.py`````
+#````` python3 Run.py`````
 
 ### 3. Dependencies:
 - Ensure you have Python 3.x installed.
