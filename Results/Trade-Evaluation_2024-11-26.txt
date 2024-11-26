@@ -1,0 +1,24 @@
+Date: 2024-11-26
+Time: 16:51:45
+User Name: Projjal K Roy
+Asset Name: Nas100
+Higher Time Frame: Daily
+Model Name: Indices_Model_Without_HTF_Bias.txt
+Score: 20/48
+Percentage: 41.67%
+Status: Don't trade this asset, find something else
+Questions answered 'No':
+- Does it a Risk Off Market? (Asset is going same direction with DXY)?
+- Does the Red Folder Liq Injection Completed?
+- Does the market takes the MTF, ERL/IRL ?(B/S-SL or FVG in M15/H1/H4)?
+- Does the Liquidity Levels are any session Liquidity?
+- Does the Liquidity grab formed in the H1/H4 Premium/Discount Zone?
+- Does your EXECUTION aligned with the TDO Rules ?
+- Does there CISD formed with the Aligned time frame After the SMT?
+- Do we have a clear LTF MSS from the MTF Liq grab after the smt?
+- Does the opposite side Asian & London High Liquidity Intact?
+- Do we retest the LTF POI after the MSS?
+- Does the Entry to logical TP-1 in 1:2 R?
+
+--------------------------------------
+
