@@ -1,0 +1,18 @@
+1. Is the market tagging HTF ERL Liquidity levels ? (e.g., Weekly/Daily B/SSL) | 3
+2. Is there SMT formation with a correlated pair in the HTF POI? | 3
+3. Has the market retested the POI situated OTE levels on the HTF Swing points? (e.g., 0.5% to 0.786% Fibonacci range)? | 3
+4. Is it a valid trading day? (e.g., Monday, Tuesday, Thursday)? | 3
+5. Has MTF MSS confirmation formed after the HTF SMT? | 3
+6. Was SH or STL taken on MTF before MSS confirmation? | 2
+7. Is there MTF clear POI after the MTF-MSS confirmation? (e.g., OB,FVG,Breaker)? | 2
+8. Does the market retest the MTF-POI in the Asian or NY Open Kill-zone? | 2
+9. Does there clear DOL in the opposite side of the  MTF-POI? (MTF-BSL/SSL)? | 2
+10. Do I have LTF MSS/Breaker/CiSD within the MTF POI? (LTF must align with MTF per TFA)? | 2
+11. Is there a clear LTF POI (e.g., OB, FVG, Breaker) for entry? | 2
+12. Has the LTF POI been retested? (e.g., m5/m15 POI aligned with MTF)? | 2
+13. Is the LTF execution aligned with MTF and HTF bias? (e.g., H1/H4 and D/W bias)? | 2
+14. Is there any red folder news events today? | 3
+15. Has the red folder liquidity injection been completed? | 2
+16. Is it an excluded no-trading day? | 2
+17. Does the market align with the HTF QT Bias ? | 2
+18. Does the psychology evaluation allows you to trade today? | 3
