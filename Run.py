@@ -342,50 +342,66 @@ def bias_identification():
 
     # Decide if the user should trade today
     if percentage_score >= 70:
-        trading_status = "Your bias is good, trade this asste on LTF."
+        trading_status = "Your bias is good, trade this asset on LTF."
     else:
-        trading_status = "Bias isn't strong enough Don't trade this asset"
+        trading_status = "Bias isn't strong enough. Don't trade this asset."
     print(trading_status)
 
     # Collect user information
     asset_name = input("\nEnter the asset name: ").strip()
-    chart_timeframe = input("\nEnter the chart time frame: ").strip()
+    chart_timeframe = input("Enter the chart time frame: ").strip()
     trading_type = input("Enter your Bias (e.g., Bullish/Bearish): ").strip()
-
-    # Save the result to a text file in the Results directory
-    save_bias_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status)
+    
+    # Collect image paths for HTF, MTF, LTF
+    image_paths = {
+        "HTF": input("Enter the path to the HTF image (or press Enter to skip): ").strip(),
+        "MTF": input("Enter the path to the MTF image (or press Enter to skip): ").strip(),
+        "LTF": input("Enter the path to the LTF image (or press Enter to skip): ").strip()
+    }
+    
+    # Save results and images
+    save_bias_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status, image_paths)
 
     # Thank you note
     print("\nThank you for using the Trading Bias Evaluation Program!")
-
-    # Wait for the user to exit
     input("Press 'Enter' to return to the main menu...")
 
 # Save the result of the Bias Evaluation to the Results directory
-def save_bias_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status):
+def save_bias_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status, image_paths):
     # Ensure the Results directory exists
     results_dir = os.path.join(os.getcwd(), "Results")
     ensure_directory(results_dir)
     
-    # Get the current date in YYYY-MM-DD format for the filename
+    # Ensure the Chat_image directory exists
+    images_dir = os.path.join(os.getcwd(), "Chat_image")
+    ensure_directory(images_dir)
+
+    # Save images to the Chat_image directory
+    image_references = []
+    for key, path in image_paths.items():
+        if os.path.exists(path):
+            image_file_name = f"{key}_Image_{datetime.now().strftime('%Y-%m-%d')}.png"
+            image_file_path = os.path.join(images_dir, image_file_name)
+            shutil.copy(path, image_file_path)
+            image_references.append(f"{key} Image: {image_file_path}")
+        else:
+            image_references.append(f"{key} Image: Not provided")
+
+    # Save text result in the Results directory
     date_str = datetime.now().strftime("%Y-%m-%d")
-    
-    # Filepath to save the result in the Results directory
-    file_name = f"Bias_Evaluation_{date_str}.txt"
-    file_path = os.path.join(results_dir, file_name)
+    text_file_name = f"Bias_Evaluation_{date_str}.txt"
+    text_file_path = os.path.join(results_dir, text_file_name)
 
-    # Get the current date and time for the content of the file
     date_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    # Format the result content
-    result = f"Date/Time: {date_time_str}\nName: {asset_name}\nType of Bias: {trading_type}\nChart Time Frame :{chart_timeframe}\n" \
-             f"Score: {score}/{total_questions} ({percentage_score:.2f}%)\nStatus: {trading_status}\n\n"
+    result = (f"Date/Time: {date_time_str}\nName: {asset_name}\nType of Bias: {trading_type}\n"
+              f"Chart Time Frame: {chart_timeframe}\nScore: {score}/{total_questions} ({percentage_score:.2f}%)\n"
+              f"Status: {trading_status}\n" + "\n".join(image_references) + "\n\n")
     
-    # Write the result to the file (append mode)
-    with open(file_path, 'a') as file:
+    with open(text_file_path, 'a') as file:
         file.write(result)
 
-    print(f"\nResult saved to: {file_path}")
+    print(f"\nResult saved to: {text_file_path}")
+    print(f"Images (if any) saved to: {images_dir}")
 
 # Option 4: Show Models
 def show_models():
