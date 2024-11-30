@@ -380,7 +380,7 @@ def save_bias_result(asset_name, trading_type, chart_timeframe, score, total_que
     image_references = []
     for key, path in image_paths.items():
         if os.path.exists(path):
-            image_file_name = f"{key}_Image_{datetime.now().strftime('%Y-%m-%d')}.png"
+            image_file_name = f"{key}_{asset_name}_Image_{datetime.now().strftime('%Y-%m-%d')}.png"
             image_file_path = os.path.join(images_dir, image_file_name)
             shutil.copy(path, image_file_path)
             image_references.append(f"{key} Image: {image_file_path}")
