@@ -489,7 +489,8 @@ def main_menu():
         print("4. Show Models")
         print("5. Add Models")
         print("6. Exit")
-        
+        print("\nFor more information, visit: https://github.com/projjalroy")  # GitHub link added
+
         choice = input("\nEnter your choice (1-6): ").strip()
         
         if choice == '1':
