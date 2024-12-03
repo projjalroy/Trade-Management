@@ -4,7 +4,7 @@ Does DOL is clear ? | 1
 Does it a Risk Off Market? (Asset is going same direction with DXY)? | 1
 Does It a Red Folder News Day? | 3
 Does the Red Folder Liq Injection Completed? | 3
-Do you executing After 9:30 AM NY time | 3
+Do you executing Within 9:30 to 10:30AM NY time | 3
 Does the market takes the MTF, ERL/IRL ?(B/S-SL or FVG in M15/H1/H4)? | 3
 Does the Liquidity Levels are any session Liquidity? | 3
 Does the Liquidity grab formed in the H1/H4 Premium/Discount Zone? | 3
