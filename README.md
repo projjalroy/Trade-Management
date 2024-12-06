@@ -1,4 +1,4 @@
-# Trading Psychology and Evaluation Program
+# Trading Psychology, Bias & Model Evaluation Program
 ### Operating system 
 This version is writen for the linux opetation system. User of windows can convert it as they required..
 ## Overview
