@@ -300,108 +300,193 @@ def trade_evaluation():
     print(f"\nResults saved to: {result_file_path}")
     input("Press 'Enter' to return to the main menu...")
 
-# Option 3: Bias Identification
-def print_bias_identification_heading():
+# Option 3: Bias Identification (Updated)
+def get_user_info():
+    """
+    Get the user's name and the asset name.
+    """
+    user_name = input("Enter your name: ").strip()
+    asset_name = input("Enter the asset name: ").strip()
+    return user_name, asset_name
+
+def ask_liquidity_type():
+    """
+    Ask the user which type of liquidity has been taken: Internal or External.
+    """
+    while True:
+        print("\nWhich liquidity has been taken?")
+        print("1. Internal Liquidity (FVG)")
+        print("2. External Liquidity (BSL/SSL)")
+        choice = input("Enter 1 or 2: ").strip()
+        
+        if choice == '1':
+            return 'Internal Liquidity'
+        elif choice == '2':
+            return 'External Liquidity'
+        else:
+            print("Invalid input. Please enter 1 or 2.")
+
+def ask_internal_liquidity_followup():
+    """
+    Ask follow-up questions related to Internal Liquidity (Fair Value Gaps).
+    """
+    while True:
+        fvg_type = input("\nIs the Fair Value Gap (FVG) Bullish or Bearish? (Enter 'Bullish' or 'Bearish'): ").strip().lower()
+        if fvg_type in ['bullish', 'bearish']:
+            return fvg_type.capitalize()
+        else:
+            print("Invalid input. Please enter 'Bullish' or 'Bearish'.")
+
+def ask_external_liquidity_followup():
+    """
+    Ask follow-up questions related to External Liquidity (Buy-side or Sell-side Liquidity).
+    """
+    while True:
+        ext_type = input("\nWas the liquidity taken from the Buy-side or Sell-side? (Enter 'BSL' or 'SSL'): ").strip().upper()
+        if ext_type in ['BSL', 'SSL']:
+            return ext_type
+        else:
+            print("Invalid input. Please enter 'BSL' or 'SSL'.")
+
+def ask_timeframe():
+    """
+    Ask the user which higher timeframe they are using.
+    """
+    while True:
+        print("\nWhich higher timeframe are you analyzing?")
+        print("1. Daily")
+        print("2. Weekly")
+        print("3. Monthly")
+        choice = input("Enter 1, 2, or 3: ").strip()
+        
+        if choice == '1':
+            return 'Daily'
+        elif choice == '2':
+            return 'Weekly'
+        elif choice == '3':
+            return 'Monthly'
+        else:
+            print("Invalid input. Please enter 1, 2, or 3.")
+
+def determine_midterm_timeframe(higher_timeframe):
+    """
+    Determine the mid-term timeframe based on the higher timeframe.
+    """
+    if higher_timeframe == 'Monthly':
+        return 'Daily'
+    elif higher_timeframe == 'Weekly':
+        return 'H4'
+    elif higher_timeframe == 'Daily':
+        return 'H1'
+
+def ask_smt_confirmation():
+    """
+    Ask if SMT (Smart Money Technique) has been confirmed in the higher timeframe.
+    """
+    while True:
+        smt_confirmed = input("\nHas SMT (Smart Money Technique) been confirmed in the higher timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
+        if smt_confirmed in ['yes', 'no']:
+            return smt_confirmed == 'yes'
+        else:
+            print("Invalid input. Please enter 'Yes' or 'No'.")
+
+def ask_midterm_mss():
+    """
+    Ask for mid-term timeframe Market Structure Shift (MSS) confirmation.
+    """
+    while True:
+        mss_confirmed = input("\nIs there a Market Structure Shift (MSS) in the mid-term timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
+        if mss_confirmed in ['yes', 'no']:
+            return mss_confirmed == 'yes'
+        else:
+            print("Invalid input. Please enter 'Yes' or 'No'.")
+
+def ask_midterm_cisd():
+    """
+    Ask for mid-term timeframe Change in State of Delivery (CISD) confirmation.
+    """
+    while True:
+        cisd_confirmed = input("\nIs there a Change in State of Delivery (CISD) in the mid-term timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
+        if cisd_confirmed in ['yes', 'no']:
+            return cisd_confirmed == 'yes'
+        else:
+            print("Invalid input. Please enter 'Yes' or 'No'.")
+
+def bias_identification():
+    """
+    Main function for bias identification with result saving.
+    """
     print("\n" + "*" * 50)
     print(" " * 10 + "Trading Bias Evaluation")
     print("*" * 50)
-    print("Answer the questions honestly to evaluate your bias based on ERL>IRL for trading today.")
-    print("Ensure you're in the right bias for your asset before you trade.\n")
-
-def bias_identification():
-    questions = [
-        "Does the market tagging the HTF ERL/IRL (e.g.,Daily/Weekly/Monthl)?",
-        "Is there SMT formation with a correlated pair in the HTF POI?",
-        "Has the market retested the POI situated OTE levels on the HTF Swing points? (e.g., 0.5% to 0.786% Fibonacci range)?",
-        "Does there any Clear DOL on the opposite side above or bellow Fib 50%",
-        "Do we have any Clear MSS with aligned TF ? After the HTF Liq grab?",
-        "Was SH or STL taken on MTF before MSS confirmation?",
-        "Is there MTF clear POI after the MTF-MSS confirmation? (e.g., OB,FVG,Breaker)",
-        "Is there any red folder news events ahead days?",
-        "Does the market align with the HTF QT Bias?",
-    ]
     
-    score = 0
-    total_questions = len(questions)
+    user_name, asset_name = get_user_info()
+    print(f"\nHello, {user_name}! You are analyzing the asset: {asset_name}\n")
     
-    # Ask each question and validate input
-    for question in questions:
-        while True:
-            answer = input(f"{question} (yes/no): ").strip().lower()
-            if answer == 'yes':
-                score += 1
-                break
-            elif answer == 'no':
-                break
-            else:
-                print("Please enter 'yes' or 'no'.")
+    liquidity_type = ask_liquidity_type()
     
-    # Calculate percentage score
-    percentage_score = (score / total_questions) * 100
-    print(f"\nYour total score is: {score}/{total_questions} ({percentage_score:.2f}%)")
-
-    # Decide if the user should trade today
-    if percentage_score >= 70:
-        trading_status = "Your bias is good, trade this asset on LTF."
+    if liquidity_type == 'Internal Liquidity':
+        followup = ask_internal_liquidity_followup()
     else:
-        trading_status = "Bias isn't strong enough. Don't trade this asset."
-    print(trading_status)
-
-    # Collect user information
-    asset_name = input("\nEnter the asset name: ").strip()
-    chart_timeframe = input("Enter the chart time frame: ").strip()
-    trading_type = input("Enter your Bias (e.g., Bullish/Bearish): ").strip()
+        followup = ask_external_liquidity_followup()
     
-    # Collect image paths for HTF, MTF, LTF
-    image_paths = {
-        "HTF": input("Enter the path to the HTF image (or press Enter to skip): ").strip(),
-        "MTF": input("Enter the path to the MTF image (or press Enter to skip): ").strip(),
-        "LTF": input("Enter the path to the LTF image (or press Enter to skip): ").strip()
-    }
+    timeframe = ask_timeframe()
+    midterm_timeframe = determine_midterm_timeframe(timeframe)
+    smt_confirmed = ask_smt_confirmation()
     
-    # Save results and images
-    save_bias_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status, image_paths)
+    bias_result = ""
+    if not smt_confirmed:
+        bias_result = "SMT not confirmed. Continuing with the previous bias."
+    else:
+        if liquidity_type == 'Internal Liquidity':
+            cisd_confirmed = ask_midterm_cisd()
+            if cisd_confirmed:
+                bias_result = f"Bias: {followup}. Confirmed with Internal Liquidity, SMT, and CISD on {midterm_timeframe} timeframe."
+            else:
+                bias_result = f"CISD not confirmed. Continuing with the previous bias or wait for CISD to form on {midterm_timeframe} timeframe."
+        elif liquidity_type == 'External Liquidity':
+            mss_confirmed = ask_midterm_mss()
+            if mss_confirmed:
+                if followup == 'BSL':
+                    bias_result = f"Bias: Bearish. Confirmed with External Liquidity, SMT, and MSS on {midterm_timeframe} timeframe."
+                else:
+                    bias_result = f"Bias: Bullish. Confirmed with External Liquidity, SMT, and MSS on {midterm_timeframe} timeframe."
+            else:
+                bias_result = f"MSS not confirmed. Continuing with the previous bias or wait for MSS to form on {midterm_timeframe} timeframe."
+    
+    print(bias_result)
+    save_bias_result(user_name, asset_name, timeframe, bias_result)
+    input("\nPress 'Enter' to return to the main menu...")
 
-    # Thank you note
-    print("\nThank you for using the Trading Bias Evaluation Program!")
-    input("Press 'Enter' to return to the main menu...")
-
-# Save the result of the Bias Evaluation to the Results directory
-def save_bias_result(asset_name, trading_type, chart_timeframe, score, total_questions, percentage_score, trading_status, image_paths):
-    # Ensure the Results directory exists
+def save_bias_result(user_name, asset_name, higher_timeframe, bias_result):
+    """
+    Save the bias identification result to a file in the Results directory.
+    """
     results_dir = os.path.join(os.getcwd(), "Results")
     ensure_directory(results_dir)
-    
-    # Ensure the Chat_image directory exists
-    images_dir = os.path.join(os.getcwd(), "Chat_image")
-    ensure_directory(images_dir)
 
-    # Save images to the Chat_image directory
-    image_references = []
-    for key, path in image_paths.items():
-        if os.path.exists(path):
-            image_file_name = f"{key}_{asset_name}_Image_{datetime.now().strftime('%Y-%m-%d')}.png"
-            image_file_path = os.path.join(images_dir, image_file_name)
-            shutil.copy(path, image_file_path)
-            image_references.append(f"{key} Image: {image_file_path}")
-        else:
-            image_references.append(f"{key} Image: Not provided")
-
-    # Save text result in the Results directory
+    # Create filename with the current date
     date_str = datetime.now().strftime("%Y-%m-%d")
-    text_file_name = f"Bias_Evaluation_{date_str}.txt"
-    text_file_path = os.path.join(results_dir, text_file_name)
+    file_name = f"Bias_Identification_{date_str}.txt"
+    file_path = os.path.join(results_dir, file_name)
 
+    # Get the current date and time
     date_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    result = (f"Date/Time: {date_time_str}\nName: {asset_name}\nType of Bias: {trading_type}\n"
-              f"Chart Time Frame: {chart_timeframe}\nScore: {score}/{total_questions} ({percentage_score:.2f}%)\n"
-              f"Status: {trading_status}\n" + "\n".join(image_references) + "\n\n")
-    
-    with open(text_file_path, 'a') as file:
-        file.write(result)
 
-    print(f"\nResult saved to: {text_file_path}")
-    print(f"Images (if any) saved to: {images_dir}")
+    # Format the result content
+    result_content = (
+        f"Date & Time: {date_time_str}\n"
+        f"User Name: {user_name}\n"
+        f"Asset Name: {asset_name}\n"
+        f"Higher Time Frame: {higher_timeframe}\n"
+        f"Result: {bias_result}\n\n"
+    )
+
+    # Write the result to the file (append mode)
+    with open(file_path, 'a') as file:
+        file.write(result_content)
+
+    print(f"\nBias identification result saved to: {file_path}")
 
 # Option 4: Show Models
 def show_models():
@@ -499,7 +584,6 @@ def main_menu():
         elif choice == '2':
             trade_evaluation()
         elif choice == '3':
-            print_bias_identification_heading()
             bias_identification()
         elif choice == '4':
             show_models()
