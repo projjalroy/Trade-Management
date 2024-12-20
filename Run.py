@@ -301,6 +301,7 @@ def trade_evaluation():
     input("Press 'Enter' to return to the main menu...")
 
 # Option 3: Bias Identification (Updated)
+# Option 3: Bias Identification (Updated)
 def get_user_info():
     """
     Get the user's name and the asset name.
@@ -375,9 +376,9 @@ def determine_midterm_timeframe(higher_timeframe):
     if higher_timeframe == 'Monthly':
         return 'Daily'
     elif higher_timeframe == 'Weekly':
-        return 'H4'
+        return '4 Hours'
     elif higher_timeframe == 'Daily':
-        return 'H1'
+        return '1 Hour'
 
 def ask_smt_confirmation():
     """
@@ -390,27 +391,75 @@ def ask_smt_confirmation():
         else:
             print("Invalid input. Please enter 'Yes' or 'No'.")
 
-def ask_midterm_mss():
+def ask_midterm_mss(midterm_timeframe):
     """
     Ask for mid-term timeframe Market Structure Shift (MSS) confirmation.
     """
     while True:
-        mss_confirmed = input("\nIs there a Market Structure Shift (MSS) in the mid-term timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
+        mss_confirmed = input(f"\nIs there a Market Structure Shift (MSS) in the {midterm_timeframe} timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
         if mss_confirmed in ['yes', 'no']:
             return mss_confirmed == 'yes'
         else:
             print("Invalid input. Please enter 'Yes' or 'No'.")
 
-def ask_midterm_cisd():
+def ask_midterm_cisd(midterm_timeframe):
     """
     Ask for mid-term timeframe Change in State of Delivery (CISD) confirmation.
     """
     while True:
-        cisd_confirmed = input("\nIs there a Change in State of Delivery (CISD) in the mid-term timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
+        cisd_confirmed = input(f"\nIs there a Change in State of Delivery (CISD) in the {midterm_timeframe} timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
         if cisd_confirmed in ['yes', 'no']:
             return cisd_confirmed == 'yes'
         else:
             print("Invalid input. Please enter 'Yes' or 'No'.")
+
+def ask_erl_irl_location():
+    """
+    Ask the user where the ERL or IRL is situated.
+    """
+    while True:
+        print("\nWhere is the ERL or IRL situated?")
+        print("1. Premium Zone")
+        print("2. Discount Zone")
+        print("3. Cannot Determine")
+        choice = input("Enter 1, 2, or 3: ").strip()
+        
+        if choice == '1':
+            return 'Premium Zone'
+        elif choice == '2':
+            return 'Discount Zone'
+        elif choice == '3':
+            return 'Cannot Determine'
+        else:
+            print("Invalid input. Please enter 1, 2, or 3.")
+
+def determine_bias(fvg_type, erl_irl_location, liquidity_type):
+    """
+    Determine the bias based on the FVG type, ERL/IRL location, and liquidity type.
+    """
+    if erl_irl_location == 'Cannot Determine':
+        if liquidity_type == 'Internal Liquidity':
+            if fvg_type == 'Bullish':
+                return 'Low Probability Bullish Bias'
+            elif fvg_type == 'Bearish':
+                return 'Low Probability Bearish Bias'
+        elif liquidity_type == 'External Liquidity':
+            if fvg_type == 'SSL':
+                return 'Low Probability Bullish Bias'
+            elif fvg_type == 'BSL':
+                return 'Low Probability Bearish Bias'
+    
+    if liquidity_type == 'Internal Liquidity':
+        if fvg_type == 'Bullish' and erl_irl_location == 'Discount Zone':
+            return 'Bullish Bias'
+        elif fvg_type == 'Bearish' and erl_irl_location == 'Premium Zone':
+            return 'Bearish Bias'
+    elif liquidity_type == 'External Liquidity':
+        if fvg_type == 'SSL' and erl_irl_location == 'Discount Zone':
+            return 'Bullish Bias'
+        elif fvg_type == 'BSL' and erl_irl_location == 'Premium Zone':
+            return 'Bearish Bias'
+    return 'No clear bias'
 
 def bias_identification():
     """
@@ -439,18 +488,19 @@ def bias_identification():
         bias_result = "SMT not confirmed. Continuing with the previous bias."
     else:
         if liquidity_type == 'Internal Liquidity':
-            cisd_confirmed = ask_midterm_cisd()
+            cisd_confirmed = ask_midterm_cisd(midterm_timeframe)
             if cisd_confirmed:
-                bias_result = f"Bias: {followup}. Confirmed with Internal Liquidity, SMT, and CISD on {midterm_timeframe} timeframe."
+                erl_irl_location = ask_erl_irl_location()
+                bias_result = determine_bias(followup, erl_irl_location, liquidity_type)
+                bias_result = f"Bias: {bias_result}. Confirmed with Internal Liquidity, SMT, and CISD on {midterm_timeframe} timeframe."
             else:
                 bias_result = f"CISD not confirmed. Continuing with the previous bias or wait for CISD to form on {midterm_timeframe} timeframe."
         elif liquidity_type == 'External Liquidity':
-            mss_confirmed = ask_midterm_mss()
+            mss_confirmed = ask_midterm_mss(midterm_timeframe)
             if mss_confirmed:
-                if followup == 'BSL':
-                    bias_result = f"Bias: Bearish. Confirmed with External Liquidity, SMT, and MSS on {midterm_timeframe} timeframe."
-                else:
-                    bias_result = f"Bias: Bullish. Confirmed with External Liquidity, SMT, and MSS on {midterm_timeframe} timeframe."
+                erl_irl_location = ask_erl_irl_location()
+                bias_result = determine_bias(followup, erl_irl_location, liquidity_type)
+                bias_result = f"Bias: {bias_result}. Confirmed with External Liquidity, SMT, and MSS on {midterm_timeframe} timeframe."
             else:
                 bias_result = f"MSS not confirmed. Continuing with the previous bias or wait for MSS to form on {midterm_timeframe} timeframe."
     
