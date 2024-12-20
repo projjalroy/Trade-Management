@@ -523,10 +523,17 @@ def bias_identification():
                 bias_result = f"MSS not confirmed. Continuing with the previous bias or wait for MSS to form on {midterm_timeframe} timeframe."
     
     print(bias_result)
-    save_bias_result(user_name, asset_name, timeframe, bias_result)
+    
+    # Ask if the user wants to save a chart image link
+    save_image = input("\nDo you want to save a chart image link? (Enter 'Yes' or 'No'): ").strip().lower()
+    chart_image_link = ""
+    if save_image == 'yes':
+        chart_image_link = input("Please provide the link to the chart image: ").strip()
+    
+    save_bias_result(user_name, asset_name, timeframe, bias_result, chart_image_link)
     input("\nPress 'Enter' to return to the main menu...")
 
-def save_bias_result(user_name, asset_name, higher_timeframe, bias_result):
+def save_bias_result(user_name, asset_name, higher_timeframe, bias_result, chart_image_link):
     """
     Save the bias identification result to a file in the Results directory.
     """
@@ -547,8 +554,13 @@ def save_bias_result(user_name, asset_name, higher_timeframe, bias_result):
         f"User Name: {user_name}\n"
         f"Asset Name: {asset_name}\n"
         f"Higher Time Frame: {higher_timeframe}\n"
-        f"Result: {bias_result}\n\n"
+        f"Result: {bias_result}\n"
     )
+    
+    if chart_image_link:
+        result_content += f"Chart Image Link: {chart_image_link}\n\n"
+    else:
+        result_content += "\n"
 
     # Write the result to the file (append mode)
     with open(file_path, 'a') as file:
