@@ -126,19 +126,34 @@ def ask_erl_irl_location():
         print("\nWhere is the ERL or IRL situated?")
         print("1. Premium Zone")
         print("2. Discount Zone")
-        choice = input("Enter 1 or 2: ").strip()
+        print("3. Cannot Determine")
+        choice = input("Enter 1, 2, or 3: ").strip()
         
         if choice == '1':
             return 'Premium Zone'
         elif choice == '2':
             return 'Discount Zone'
+        elif choice == '3':
+            return 'Cannot Determine'
         else:
-            print("Invalid input. Please enter 1 or 2.")
+            print("Invalid input. Please enter 1, 2, or 3.")
 
 def determine_bias(fvg_type, erl_irl_location, liquidity_type):
     """
     Determine the bias based on the FVG type, ERL/IRL location, and liquidity type.
     """
+    if erl_irl_location == 'Cannot Determine':
+        if liquidity_type == 'Internal Liquidity':
+            if fvg_type == 'Bullish':
+                return 'Low Probability Bullish Bias'
+            elif fvg_type == 'Bearish':
+                return 'Low Probability Bearish Bias'
+        elif liquidity_type == 'External Liquidity':
+            if fvg_type == 'SSL':
+                return 'Low Probability Bullish Bias'
+            elif fvg_type == 'BSL':
+                return 'Low Probability Bearish Bias'
+    
     if liquidity_type == 'Internal Liquidity':
         if fvg_type == 'Bullish' and erl_irl_location == 'Discount Zone':
             return 'Bullish Bias'
