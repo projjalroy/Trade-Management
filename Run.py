@@ -301,7 +301,6 @@ def trade_evaluation():
     input("Press 'Enter' to return to the main menu...")
 
 # Option 3: Bias Identification (Updated)
-# Option 3: Bias Identification (Updated)
 def get_user_info():
     """
     Get the user's name and the asset name.
@@ -379,6 +378,17 @@ def determine_midterm_timeframe(higher_timeframe):
         return '4 Hours'
     elif higher_timeframe == 'Daily':
         return '1 Hour'
+
+def determine_lowterm_timeframe(midterm_timeframe):
+    """
+    Determine the low-term timeframe based on the midterm timeframe.
+    """
+    if midterm_timeframe == '4 Hours':
+        return '15 Minutes'
+    elif midterm_timeframe == '1 Hour':
+        return '5 Minutes'
+    elif midterm_timeframe == '15 Minutes':
+        return '1 Minute'
 
 def ask_smt_confirmation():
     """
@@ -492,7 +502,11 @@ def bias_identification():
             if cisd_confirmed:
                 erl_irl_location = ask_erl_irl_location()
                 bias_result = determine_bias(followup, erl_irl_location, liquidity_type)
-                bias_result = f"Bias: {bias_result}. Confirmed with Internal Liquidity, SMT, and CISD on {midterm_timeframe} timeframe."
+                lowterm_timeframe = determine_lowterm_timeframe(midterm_timeframe)
+                if 'Low Probability' not in bias_result:
+                    bias_result = f"Bias: {bias_result}. Confirmed with Internal Liquidity, SMT, and CISD on {midterm_timeframe} timeframe. Please use {midterm_timeframe} to {lowterm_timeframe} execution model."
+                else:
+                    bias_result = f"Bias: {bias_result}. Confirmed with Internal Liquidity, SMT, and CISD on {midterm_timeframe} timeframe. Please use {midterm_timeframe} to {lowterm_timeframe} execution model."
             else:
                 bias_result = f"CISD not confirmed. Continuing with the previous bias or wait for CISD to form on {midterm_timeframe} timeframe."
         elif liquidity_type == 'External Liquidity':
@@ -500,7 +514,11 @@ def bias_identification():
             if mss_confirmed:
                 erl_irl_location = ask_erl_irl_location()
                 bias_result = determine_bias(followup, erl_irl_location, liquidity_type)
-                bias_result = f"Bias: {bias_result}. Confirmed with External Liquidity, SMT, and MSS on {midterm_timeframe} timeframe."
+                lowterm_timeframe = determine_lowterm_timeframe(midterm_timeframe)
+                if 'Low Probability' not in bias_result:
+                    bias_result = f"Bias: {bias_result}. Confirmed with External Liquidity, SMT, and MSS on {midterm_timeframe} timeframe. Please use {midterm_timeframe} to {lowterm_timeframe} execution model."
+                else:
+                    bias_result = f"Bias: {bias_result}. Confirmed with External Liquidity, SMT, and MSS on {midterm_timeframe} timeframe. Please use {midterm_timeframe} to {lowterm_timeframe} execution model."
             else:
                 bias_result = f"MSS not confirmed. Continuing with the previous bias or wait for MSS to form on {midterm_timeframe} timeframe."
     
