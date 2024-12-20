@@ -96,23 +96,23 @@ def ask_smt_confirmation():
         else:
             print("Invalid input. Please enter 'Yes' or 'No'.")
 
-def ask_midterm_cisd():
+def ask_midterm_cisd(midterm_timeframe):
     """
     Ask the user if CISD is confirmed on the midterm timeframe.
     """
     while True:
-        cisd_confirmed = input("\nIs CISD confirmed on the midterm timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
+        cisd_confirmed = input(f"\nIs CISD confirmed on the {midterm_timeframe} timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
         if cisd_confirmed in ['yes', 'no']:
             return cisd_confirmed == 'yes'
         else:
             print("Invalid input. Please enter 'Yes' or 'No'.")
 
-def ask_midterm_mss():
+def ask_midterm_mss(midterm_timeframe):
     """
     Ask the user if MSS is confirmed on the midterm timeframe.
     """
     while True:
-        mss_confirmed = input("\nIs MSS confirmed on the midterm timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
+        mss_confirmed = input(f"\nIs MSS confirmed on the {midterm_timeframe} timeframe? (Enter 'Yes' or 'No'): ").strip().lower()
         if mss_confirmed in ['yes', 'no']:
             return mss_confirmed == 'yes'
         else:
@@ -189,7 +189,7 @@ def bias_identification():
         bias_result = "SMT not confirmed. Continuing with the previous bias."
     else:
         if liquidity_type == 'Internal Liquidity':
-            cisd_confirmed = ask_midterm_cisd()
+            cisd_confirmed = ask_midterm_cisd(midterm_timeframe)
             if cisd_confirmed:
                 erl_irl_location = ask_erl_irl_location()
                 bias_result = determine_bias(followup, erl_irl_location, liquidity_type)
@@ -197,7 +197,7 @@ def bias_identification():
             else:
                 bias_result = f"CISD not confirmed. Continuing with the previous bias or wait for CISD to form on {midterm_timeframe} timeframe."
         elif liquidity_type == 'External Liquidity':
-            mss_confirmed = ask_midterm_mss()
+            mss_confirmed = ask_midterm_mss(midterm_timeframe)
             if mss_confirmed:
                 erl_irl_location = ask_erl_irl_location()
                 bias_result = determine_bias(followup, erl_irl_location, liquidity_type)
